@@ -1,2 +1,19 @@
 # ytdlp-ps-downloader
-Lightweight PowerShell wrapper for yt-dlp with hotkey quality selection and AV1/VP9 priority.
+
+Simple PowerShell script to batch download videos with quality choice.
+
+### 🚀 Features
+- **Hotkeys:** Press `1-5` or `Enter/Backspace` to choose resolution.
+- **Efficient:** Prioritizes **AV1** and **VP9** codecs for smallest file size.
+- **Watch while downloading:** Uses MKV for streamable partial files.
+- **Resumable:** Supports continuing interrupted downloads.
+
+### 🛠 Setup
+1. Open `downloader.ps1`.
+2. Set your paths for `yt-dlp`, `ffmpeg`, and `deno`.
+3. Run the script.
+
+### 📦 Requirements
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- [FFmpeg](https://ffmpeg.org/)
+- [Deno](https://deno.com/) (recommended)
