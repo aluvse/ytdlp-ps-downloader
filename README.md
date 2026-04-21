@@ -9,7 +9,7 @@ Simple PowerShell script to batch download videos with quality choice.
 - **Resumable:** Supports continuing interrupted downloads.
 
 ### 🛠 Setup
-1. Open `downloader.ps1`.
+1. Open `run.ps1`.
 2. Set your paths for `yt-dlp`, `ffmpeg`, and `deno`.
 3. Run the script.
 
