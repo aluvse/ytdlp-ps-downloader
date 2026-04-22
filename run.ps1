@@ -37,23 +37,26 @@ if ($urls.Count -eq 0) {
 }
 
 Write-Host "`n2. Choose Quality (Press key):" -ForegroundColor Cyan
-Write-Host "[1] - 1080p"
-Write-Host "[2] / [ENTER]      - 720p" -ForegroundColor Green
-Write-Host "[3] / [BACKSPACE] - 480p" -ForegroundColor Yellow
-Write-Host "[4] - 360p"
-Write-Host "[5] - 144p"
+Write-Host "[1] - 1440p (2K)"
+Write-Host "[2] - 1080p"
+Write-Host "[3] / [ENTER]      - 720p" -ForegroundColor Green
+Write-Host "[4] / [BACKSPACE] - 480p" -ForegroundColor Yellow
+Write-Host "[5] - 360p"
+Write-Host "[6] - 144p"
 
 $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 $vk = $key.VirtualKeyCode
 
-if ($vk -eq 49) { $res = 1080 }
-elseif ($vk -eq 50 -or $vk -eq 13) { $res = 720 }
-elseif ($vk -eq 51 -or $vk -eq 8) { $res = 480 }
-elseif ($vk -eq 52) { $res = 360 }
-elseif ($vk -eq 53) { $res = 144 }
+# Логика выбора с учетом смещения
+if ($vk -eq 49) { $res = 1440 }
+elseif ($vk -eq 50) { $res = 1080 }
+elseif ($vk -eq 51 -or $vk -eq 13) { $res = 720 }
+elseif ($vk -eq 52 -or $vk -eq 8) { $res = 480 }
+elseif ($vk -eq 53) { $res = 360 }
+elseif ($vk -eq 54) { $res = 144 }
 else { $res = 720 ; Write-Host "Defaulting to 720p" }
 
-Write-Host "`nSelected: ${res}p" -ForegroundColor Cyan
+Write-Host "`nSelected: ${res}p (or best available below)" -ForegroundColor Cyan
 
 # ==========================================================
 # Download Process
@@ -62,8 +65,9 @@ Write-Host "`nSelected: ${res}p" -ForegroundColor Cyan
 foreach ($url in $urls) {
     Write-Host "`n[*] Processing: $url" -ForegroundColor Yellow
     
-    # Codec priority: AV1 > VP9 > H.264
-    $formatStr = "bestvideo[height<=$res][vcodec^=av01]+bestaudio/best[height<=$res]/bestvideo[height<=$res][vcodec^=vp9]+bestaudio/best[height<=$res]/best"
+    # Приоритет кодеков: AV1 > VP9 > H.264
+    # Конструкция [height<=$res] гарантирует скачивание максимально возможного качества, не превышающего выбранное.
+    $formatStr = "bestvideo[height<=$res][vcodec^=av01]+bestaudio/best[height<=$res]/bestvideo[height<=$res][vcodec^=vp9]+bestaudio/best[height<=$res]/best[height<=$res]"
     
     & $ytDlpExe -f $formatStr `
             --continue `
