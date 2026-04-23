@@ -69,9 +69,8 @@ if ($audioOnly) {
     $extraArgs = "--extract-audio", "--audio-format", "m4a"
 } else {
     Write-Host "`nSelected: ${res}p (or best available)" -ForegroundColor Cyan
-    $formatStr = "bestvideo[height<=$res][vcodec^=av01]+bestaudio/best[height<=$res]/bestvideo[height<=$res][vcodec^=vp9]+bestaudio/best[height<=$res]/best[height<=$res]"
-    $extStr = "mkv"
-    $extraArgs = "--merge-output-format", $extStr
+    $formatStr = "bestvideo[height<=$res][vcodec^=av01]+bestaudio/bestvideo[height<=$res][vcodec^=vp9]+bestaudio/bestvideo[height<=$res]+bestaudio/best"
+    $extraArgs = @("--merge-output-format", "mkv", "--external-downloader-args", "ffmpeg:-loglevel panic")
 }
 
 # ==========================================================
