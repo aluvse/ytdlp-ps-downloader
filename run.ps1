@@ -73,6 +73,13 @@ if ($audioOnly) {
     $extraArgs = @("--merge-output-format", "mkv", "--external-downloader-args", "ffmpeg:-loglevel panic")
 }
 
+
+# ==========================================================
+# Local ID Database
+# ==========================================================
+
+$archiveFile = Join-Path $savePath "downloaded_history.txt"
+
 # ==========================================================
 # Download Process
 # ==========================================================
@@ -80,19 +87,33 @@ if ($audioOnly) {
 foreach ($url in $urls) {
     Write-Host "`n[*] Processing: $url" -ForegroundColor Yellow
     
-    & $ytDlpExe -f $formatStr `
-            --continue `
-            --no-overwrites `
-            --ffmpeg-location "$ffmpegBin" `
-            @extraArgs `
-            --hls-prefer-ffmpeg `
-            --fixup detect_or_warn `
-            --abort-on-unavailable-fragment `
-            --socket-timeout 30 `
-            --js-runtimes "deno:$denoPath" `
-            --fragment-retries 10 `
-            -o "$savePath\%(title)s.%(ext)s" `
-            $url
+    if ($url -like "*list=*") {
+        $outTemplate = "./%(playlist_title)s/%(playlist_index)s - %(title)s.%(ext)s"
+    } else {
+        $outTemplate = "./%(title)s.%(ext)s"
+    }
+
+    $allArgs = @(
+        "-f", $formatStr,
+        "--continue",
+        "--no-overwrites",
+        "--download-archive", $archiveFile,
+        "--ffmpeg-location", $ffmpegBin,
+        "--hls-prefer-ffmpeg",
+        "--fixup", "detect_or_warn",
+        "--abort-on-unavailable-fragment",
+        "--socket-timeout", "30",
+        "--js-runtimes", "deno:$denoPath",
+        "--fragment-retries", "10",
+        "--yes-playlist",
+        "--output-na-placeholder", "",
+        "--restrict-filenames",
+        "-o", $outTemplate
+    )
+
+    if ($extraArgs) { $allArgs += $extraArgs }
+
+    & $ytDlpExe $allArgs "$url"
 }
 
 Write-Host "`n[!] All tasks completed." -ForegroundColor Green
