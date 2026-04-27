@@ -1,12 +1,14 @@
 ## yt-dlp-sh
 
-Minimalist PowerShell script for batch downloading videos. Stable, fast, and simple.
+Minimalist PowerShell script for batch downloading videos. Simple, fast and stable.
 
 ### Features
-- **Hotkeys:** Press `1-5` or `Enter/Backspace` to choose resolution.
-- **Efficient:** Prioritizes **AV1** and **VP9** codecs for smallest file size.
-- **Watch while downloading:** Uses MKV for streamable partial files.
-- **Resumable:** Supports continuing interrupted downloads.
+- **Hotkeys:** Instant resolution selection using `0-6`, `Enter` (1080p), or `Backspace` (720p).
+- **Efficient Codecs:** Automatically prioritizes **AV1** and **VP9** for the smallest file sizes.
+- **Audio Mode:** Dedicated "Audio Only" (M4A) mode via hotkey `0`.
+- **Smart Playlists:** Auto-creates subfolders and maintains indexing for playlists.
+- **Preview Support:** Uses MKV container to allow watching files during the download.
+- **Resumable:** Handles HLS fragments and supports resuming interrupted tasks.
 
 ### Setup
 1. Open `run.ps1`.
